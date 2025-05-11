@@ -8,7 +8,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from '@mui/material/IconButton';
 import '../Style/ToDo.css';
 
-export default function ToDo() {
+export default function ToDo({ title, details }) {
   return (
     <>
       <Card
@@ -28,14 +28,14 @@ export default function ToDo() {
                 component="h2"
                 sx={{ textAlign: 'right' }}
               >
-                المهمة الأولى
+                {title}
               </Typography>
               <Typography
                 variant="h6"
                 component="h2"
                 sx={{ textAlign: 'right' }}
               >
-                تفاصيل المهمة الأولى
+                {details}
               </Typography>
             </Grid>
             <Grid

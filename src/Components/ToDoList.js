@@ -15,8 +15,39 @@ import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToDo from './ToDo';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import { v4 as Guid } from 'uuid';
+import { useState } from 'react';
+const stateToDos = [
+  {
+    id: Guid(),
+    title: 'عنوان المهمة',
+    details: 'هنا سيكتب تفاصيل المهمة',
+    isDone: false,
+  },
+  {
+    id: Guid(),
+    title: 'عنوان المهمة',
+    details: 'هنا سيكتب تفاصيل المهمة',
+    isDone: false,
+  },
+];
 
 export default function ToDoList() {
+  const [todos, setTodos] = useState(stateToDos);
+  const [titleInput, setTitleInput] = useState('');
+  const todosJsx = todos.map((td) => {
+    return <ToDo key={td.id} title={td.title} details={td.details} />;
+  });
+  function handelAddClick() {
+    const newTask = {
+      id: Guid(),
+      title: titleInput,
+      details: '',
+      isDone: false,
+    };
+    setTodos([...todos, newTask]);
+    setTitleInput('');
+  }
   return (
     <React.Fragment>
       <Container maxWidth="sm">
@@ -35,15 +66,19 @@ export default function ToDoList() {
               <ToggleButton value="center">منجز</ToggleButton>
               <ToggleButton value="left">الكل</ToggleButton>
             </ToggleButtonGroup>
-            <ToDo />
+            {todosJsx}
           </CardContent>
           <Grid container spacing={1} sx={{ margin: '20px' }}>
             <Grid size={8}>
               <TextField
                 id="outlined-basic"
-                label="Outlined"
+                label="إضافة مهمة جديدة"
                 variant="outlined"
                 style={{ width: '100%' }}
+                value={titleInput}
+                onChange={(event) => {
+                  setTitleInput(event.target.value);
+                }}
               />
             </Grid>
             <Grid size={4}>
@@ -53,8 +88,9 @@ export default function ToDoList() {
                   width: '100%',
                   height: '100%',
                 }}
+                onClick={handelAddClick}
               >
-                Contained
+                إضافة
               </Button>
             </Grid>
           </Grid>
