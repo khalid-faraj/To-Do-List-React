@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+@font-face {
+  font-family: Kufam ;
+  src: url("../public/fonts/Kufam-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Kufam ;
+  src: url("../public/fonts/Kufam-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Kufam ;
+  src: url("../public/fonts/Kufam-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Kufam ;
+  src: url("../public/fonts/Kufam-Regular.ttf");
+  font-weight: 400;
+}
+
+
