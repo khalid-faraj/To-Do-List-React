@@ -13,12 +13,14 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToDo from './ToDo';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 export default function ToDoList() {
   return (
     <React.Fragment>
       <Container maxWidth="sm">
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{ minWidth: 275, borderRadius: '12px' }}>
           <CardContent>
             <Typography variant="h2" component="h2">
               مهامي
@@ -35,9 +37,27 @@ export default function ToDoList() {
             </ToggleButtonGroup>
             <ToDo />
           </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
+          <Grid container spacing={1} sx={{ margin: '20px' }}>
+            <Grid size={8}>
+              <TextField
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+                style={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid size={4}>
+              <Button
+                variant="contained"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                Contained
+              </Button>
+            </Grid>
+          </Grid>
         </Card>
       </Container>
     </React.Fragment>
