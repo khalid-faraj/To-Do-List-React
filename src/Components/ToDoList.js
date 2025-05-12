@@ -34,7 +34,10 @@ export default function ToDoList() {
       details: '',
       isDone: false,
     };
-    setTodos([...todos, newTask]);
+
+    const updatedtodos = [...todos, newTask];
+    setTodos(updatedtodos);
+    localStorage.setItem('todos', JSON.stringify(updatedtodos));
     setTitleInput('');
   }
   return (
