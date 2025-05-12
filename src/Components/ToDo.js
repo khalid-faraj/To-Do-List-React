@@ -7,10 +7,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from '@mui/material/IconButton';
 import '../Style/ToDo.css';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 export default function ToDo({ todo }) {
   const { todos, setTodos } = useContext(ToDosContext);
+  const [showDialog, setShowDialog] = useState(false);
+  {
+    /*Event Handler*/
+  }
+
   function handelCheckClick() {
     const updatedToDos = todos.map((t) => {
       if (t.id == todo.id) {
@@ -20,8 +32,54 @@ export default function ToDo({ todo }) {
     });
     setTodos(updatedToDos);
   }
+
+  function handleDeleteClick() {
+    setShowDialog(true);
+  }
+
+  function handleClose() {
+    setShowDialog(false);
+  }
+
+  function handleDeleteConfirm() {
+    const updatedToDos = todos.filter((t) => {
+      if (t.id == todo.id) {
+        return false;
+      }
+      return true;
+    });
+    setTodos(updatedToDos);
+  }
+
+  {
+    /* ==== Event Handler ====*/
+  }
+
   return (
     <>
+      <Dialog
+        open={showDialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ direction: 'rtl' }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'هل أنت متأكد من حذف المهمة؟'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            حذف المهمة يعني أنك لن تستطيع الوصول إليها مرة أخرى عزيزي المستخدم.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>إغلاق</Button>
+          <Button onClick={handleDeleteConfirm} autoFocus>
+            مسح
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Card
         className="card"
         sx={{
@@ -82,6 +140,8 @@ export default function ToDo({ todo }) {
               >
                 <EditOutlinedIcon />
               </IconButton>
+
+              {/*--------------------------------------*/}
               <IconButton
                 className="iconButton"
                 aria-label="delete"
@@ -90,9 +150,11 @@ export default function ToDo({ todo }) {
                   background: 'white',
                   border: 'solid #b23c17 3px',
                 }}
+                onClick={handleDeleteClick}
               >
                 <DeleteIcon />
               </IconButton>
+              {/*--------------------------------------*/}
             </Grid>
           </Grid>
         </CardContent>
