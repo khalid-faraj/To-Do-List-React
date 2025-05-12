@@ -3,13 +3,34 @@ import './App.css';
 import ToDoList from './Components/ToDoList';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { typographyClasses } from '@mui/material';
+import { ToDosContext } from './Contexts/ToDosContext';
+import { v4 as Guid } from 'uuid';
+import { useState } from 'react';
+import ToDo from './Components/ToDo';
 
 const theme = createTheme({
   typography: {
     fontFamily: ['Kufam'],
   },
 });
+
+const stateToDos = [
+  {
+    id: Guid(),
+    title: 'عنوان المهمة',
+    details: 'هنا سيكتب تفاصيل المهمة',
+    isDone: false,
+  },
+  {
+    id: Guid(),
+    title: 'عنوان المهمة',
+    details: 'هنا سيكتب تفاصيل المهمة',
+    isDone: false,
+  },
+];
+
 function App() {
+  const [todos, setTodos] = useState(stateToDos);
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -23,7 +44,9 @@ function App() {
           direction: 'rtl',
         }}
       >
-        <ToDoList />
+        <ToDosContext.Provider value={{ todos, setTodos }}>
+          <ToDoList />
+        </ToDosContext.Provider>
       </div>
     </ThemeProvider>
   );

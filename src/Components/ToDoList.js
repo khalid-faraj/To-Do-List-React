@@ -17,27 +17,16 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
 import { useState } from 'react';
-const stateToDos = [
-  {
-    id: Guid(),
-    title: 'عنوان المهمة',
-    details: 'هنا سيكتب تفاصيل المهمة',
-    isDone: false,
-  },
-  {
-    id: Guid(),
-    title: 'عنوان المهمة',
-    details: 'هنا سيكتب تفاصيل المهمة',
-    isDone: false,
-  },
-];
-
+import { ToDosContext } from '../Contexts/ToDosContext';
+import { useContext } from 'react';
 export default function ToDoList() {
-  const [todos, setTodos] = useState(stateToDos);
-  const [titleInput, setTitleInput] = useState('');
+  const { todos, setTodos } = useContext(ToDosContext);
+  const value = useContext(ToDosContext);
   const todosJsx = todos.map((td) => {
-    return <ToDo key={td.id} title={td.title} details={td.details} />;
+    return <ToDo key={td.id} todo={td} />;
   });
+  const [titleInput, setTitleInput] = useState('');
+
   function handelAddClick() {
     const newTask = {
       id: Guid(),

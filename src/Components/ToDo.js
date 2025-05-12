@@ -7,8 +7,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from '@mui/material/IconButton';
 import '../Style/ToDo.css';
-
-export default function ToDo({ title, details }) {
+import { useContext } from 'react';
+import { ToDosContext } from '../Contexts/ToDosContext';
+export default function ToDo({ todo }) {
+  const { todos, setTodos } = useContext(ToDosContext);
+  function handelCheckClick() {
+    const updatedToDos = todos.map((t) => {
+      if (t.id == todo.id) {
+        t.isDone = !t.isDone;
+      }
+      return t;
+    });
+    setTodos(updatedToDos);
+  }
   return (
     <>
       <Card
@@ -28,14 +39,14 @@ export default function ToDo({ title, details }) {
                 component="h2"
                 sx={{ textAlign: 'right' }}
               >
-                {title}
+                {todo.title}
               </Typography>
               <Typography
                 variant="h6"
                 component="h2"
                 sx={{ textAlign: 'right' }}
               >
-                {details}
+                {todo.details}
               </Typography>
             </Grid>
             <Grid
@@ -44,17 +55,22 @@ export default function ToDo({ title, details }) {
               justifyContent="space-around"
               alignItems="center"
             >
+              {/*--------------------------------------*/}
               <IconButton
                 className="iconButton"
                 aria-label="complete"
                 style={{
-                  color: '#8bc34a',
-                  background: 'white',
+                  color: todo.isDone ? 'white' : '#8bc34a',
+                  background: todo.isDone ? '#8bc34a' : 'white',
                   border: 'solid #8bc34a 3px',
+                }}
+                onClick={() => {
+                  handelCheckClick();
                 }}
               >
                 <CheckIcon />
               </IconButton>
+              {/*--------------------------------------*/}
               <IconButton
                 className="iconButton"
                 aria-label="edit"
