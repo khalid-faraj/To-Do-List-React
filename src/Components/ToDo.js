@@ -41,6 +41,7 @@ export default function ToDo({ todo }) {
       return t;
     });
     setTodos(updatedToDos);
+    localStorage.setItem('todos', JSON.stringify(updatedToDos));
   }
 
   function handleEditClick() {
@@ -59,6 +60,8 @@ export default function ToDo({ todo }) {
       }
     });
     setTodos(edited_ToDo);
+    localStorage.setItem('todos', JSON.stringify(edited_ToDo));
+
     setShowEditDialog(false);
   }
 
@@ -78,6 +81,7 @@ export default function ToDo({ todo }) {
       return true;
     });
     setTodos(updatedToDos);
+    localStorage.setItem('todos', JSON.stringify(updatedToDos));
   }
 
   /********* Event Handler **********/

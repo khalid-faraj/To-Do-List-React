@@ -16,16 +16,21 @@ import ToDo from './ToDo';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
-import { useContext } from 'react';
+
 export default function ToDoList() {
   const { todos, setTodos } = useContext(ToDosContext);
-  const value = useContext(ToDosContext);
+
   const todosJsx = todos.map((td) => {
     return <ToDo key={td.id} todo={td} />;
   });
   const [titleInput, setTitleInput] = useState('');
+
+  useEffect(() => {
+    const storageToDos = JSON.parse(localStorage.getItem('todos'));
+    setTodos(storageToDos);
+  }, []);
 
   function handelAddClick() {
     const newTask = {
@@ -34,12 +39,12 @@ export default function ToDoList() {
       details: '',
       isDone: false,
     };
-
     const updatedtodos = [...todos, newTask];
     setTodos(updatedtodos);
     localStorage.setItem('todos', JSON.stringify(updatedtodos));
     setTitleInput('');
   }
+
   return (
     <React.Fragment>
       <Container maxWidth="sm">
