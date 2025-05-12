@@ -72,7 +72,14 @@ export default function ToDoList() {
   return (
     <React.Fragment>
       <Container maxWidth="sm">
-        <Card sx={{ minWidth: 275, borderRadius: '12px' }}>
+        <Card
+          sx={{
+            minWidth: 275,
+            borderRadius: '12px',
+            maxHeight: '80vh',
+            overflow: 'scroll',
+          }}
+        >
           <CardContent>
             <Typography variant="h2" component="h2">
               مهامي
@@ -112,6 +119,7 @@ export default function ToDoList() {
                   height: '100%',
                 }}
                 onClick={handelAddClick}
+                disabled={titleInput.length === 0}
               >
                 إضافة
               </Button>

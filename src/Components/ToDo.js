@@ -187,14 +187,20 @@ export default function ToDo({ todo }) {
               <Typography
                 variant="h4"
                 component="h2"
-                sx={{ textAlign: 'right' }}
+                sx={{
+                  textAlign: 'right',
+                  textDecoration: todo.isDone ? 'line-through' : 'none',
+                }}
               >
                 {todo.title}
               </Typography>
               <Typography
                 variant="h6"
                 component="h2"
-                sx={{ textAlign: 'right' }}
+                sx={{
+                  textAlign: 'right',
+                  textDecoration: todo.isDone ? 'line-through' : 'none',
+                }}
               >
                 {todo.details}
               </Typography>
