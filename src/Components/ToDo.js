@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import IconButton from '@mui/material/IconButton';
 import '../Style/ToDo.css';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -24,13 +24,14 @@ export default function ToDo({ todo }) {
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [editedToDo, setEditedToDo] = useState({
-    title: todo.title,
-    details: todo.details,
-  });
+  const [editedToDo, setEditedToDo] = useState({ ...todo });
 
   /********* States **********/
-
+  useEffect(() => {
+    if (showEditDialog) {
+      setEditedToDo({ ...todo });
+    }
+  }, [showEditDialog, todo]);
   /********* Event Handler **********/
 
   function handelCheckClick() {
@@ -112,6 +113,7 @@ export default function ToDo({ todo }) {
         </DialogActions>
       </Dialog>
       {/* ---- Delete Dialog ---- */}
+
       {/*      Edit Dialog      */}
       <Dialog
         open={showEditDialog}

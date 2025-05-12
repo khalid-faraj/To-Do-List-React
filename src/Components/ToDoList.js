@@ -75,7 +75,6 @@ export default function ToDoList() {
         <Card
           sx={{
             minWidth: 275,
-            borderRadius: '12px',
             maxHeight: '80vh',
             overflow: 'scroll',
           }}
@@ -89,7 +88,7 @@ export default function ToDoList() {
               exclusive
               aria-label="text alignment"
               style={{ direction: 'ltr', marginTop: '30px' }}
-              value={selectedTasksList}
+              value={tasksCategory}
               onChange={changeDisplayedType}
             >
               <ToggleButton value="notCompleted">غير منجز</ToggleButton>
