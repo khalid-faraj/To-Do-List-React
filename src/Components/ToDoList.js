@@ -52,7 +52,7 @@ export default function ToDoList() {
   }
 
   useEffect(() => {
-    const storageToDos = JSON.parse(localStorage.getItem('todos'));
+    const storageToDos = JSON.parse(localStorage.getItem('todos')) ?? [];
     setTodos(storageToDos);
   }, []);
 
