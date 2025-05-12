@@ -21,11 +21,35 @@ import { ToDosContext } from '../Contexts/ToDosContext';
 
 export default function ToDoList() {
   const { todos, setTodos } = useContext(ToDosContext);
+  const [titleInput, setTitleInput] = useState('');
 
-  const todosJsx = todos.map((td) => {
+  const [tasksCategory, setTasksCategory] = useState('all');
+
+  const completedTasks = todos.filter((t) => {
+    return t.isDone;
+  });
+
+  const notCompletedTasks = todos.filter((t) => {
+    return !t.isDone;
+  });
+
+  let selectedTasksList = todos;
+
+  if (tasksCategory == 'completed') {
+    selectedTasksList = completedTasks;
+  }
+
+  if (tasksCategory == 'notCompleted') {
+    selectedTasksList = notCompletedTasks;
+  }
+
+  const todosJsx = selectedTasksList.map((td) => {
     return <ToDo key={td.id} todo={td} />;
   });
-  const [titleInput, setTitleInput] = useState('');
+
+  function changeDisplayedType(e) {
+    setTasksCategory(e.target.value);
+  }
 
   useEffect(() => {
     const storageToDos = JSON.parse(localStorage.getItem('todos'));
@@ -58,10 +82,12 @@ export default function ToDoList() {
               exclusive
               aria-label="text alignment"
               style={{ direction: 'ltr', marginTop: '30px' }}
+              value={selectedTasksList}
+              onChange={changeDisplayedType}
             >
-              <ToggleButton value="right">غير منجز</ToggleButton>
-              <ToggleButton value="center">منجز</ToggleButton>
-              <ToggleButton value="left">الكل</ToggleButton>
+              <ToggleButton value="notCompleted">غير منجز</ToggleButton>
+              <ToggleButton value="completed">منجز</ToggleButton>
+              <ToggleButton value="all">الكل</ToggleButton>
             </ToggleButtonGroup>
             {todosJsx}
           </CardContent>
