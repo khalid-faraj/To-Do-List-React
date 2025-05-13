@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert } from '@mui/material';
 
-export default function MySnackBar({ open }) {
+export default function MySnackBar({ open, message }) {
   const action = (
     <React.Fragment>
       <Button color="secondary" size="small">
@@ -25,7 +25,7 @@ export default function MySnackBar({ open }) {
         message="Note archived"
         action={action}
       >
-        <Alert severity="success">This is a success Alert.</Alert>
+        <Alert severity="success">{message}</Alert>
       </Snackbar>
     </div>
   );

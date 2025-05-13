@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import '../Style/ToDo.css';
 import { useContext, useState, useEffect } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
+import { ToastContext } from '../Contexts/ToastContext';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -19,6 +20,7 @@ import TextField from '@mui/material/TextField';
 
 export default function ToDo({ todo, showDelete, showEdit }) {
   const { todos, setTodos } = useContext(ToDosContext);
+  const { showAndHideToast } = useContext(ToastContext);
 
   /********* States **********/
 
@@ -35,6 +37,7 @@ export default function ToDo({ todo, showDelete, showEdit }) {
     });
     setTodos(updatedToDos);
     localStorage.setItem('todos', JSON.stringify(updatedToDos));
+    showAndHideToast('أحسنت');
   }
 
   function handleEditClick() {

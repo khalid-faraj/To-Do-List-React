@@ -23,10 +23,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { ToastContext } from '../Contexts/ToastContext';
 
 export default function ToDoList() {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { todos, setTodos } = useContext(ToDosContext);
+  const { showAndHideToast } = useContext(ToastContext);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [titleInput, setTitleInput] = useState('');
   const [dialogToDo, setDialogToDo] = useState(null);
   const [tasksCategory, setTasksCategory] = useState('all');
@@ -80,6 +82,7 @@ export default function ToDoList() {
     setTodos(updatedtodos);
     localStorage.setItem('todos', JSON.stringify(updatedtodos));
     setTitleInput('');
+    showAndHideToast('تمت إضافة مهمة جديدة');
   }
 
   /********* Event Handler **********/
@@ -103,6 +106,7 @@ export default function ToDoList() {
     setTodos(updatedToDos);
     localStorage.setItem('todos', JSON.stringify(updatedToDos));
     setShowDeleteDialog(false);
+    showAndHideToast('تم المسح');
   }
 
   function showTheEditDialog(todo) {
@@ -123,6 +127,7 @@ export default function ToDoList() {
     setTodos(edited_ToDo);
     localStorage.setItem('todos', JSON.stringify(edited_ToDo));
     setShowEditDialog(false);
+    showAndHideToast('تم التعديل');
   }
   const todosJsx = selectedTasksList.map((td) => {
     return (
