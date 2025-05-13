@@ -7,6 +7,7 @@ import { ToDosContext } from './Contexts/ToDosContext';
 import { v4 as Guid } from 'uuid';
 import { useState } from 'react';
 import ToDo from './Components/ToDo';
+import MySnackBar from './Components/MySnackBar';
 
 const theme = createTheme({
   typography: {
@@ -31,6 +32,15 @@ const stateToDos = [
 
 function App() {
   const [todos, setTodos] = useState(stateToDos);
+  const [open, setOpen] = useState(true);
+
+  function showAndHideToaster() {
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 2000);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -44,6 +54,7 @@ function App() {
           direction: 'rtl',
         }}
       >
+        <MySnackBar open={open} />
         <ToDosContext.Provider value={{ todos, setTodos }}>
           <ToDoList />
         </ToDosContext.Provider>
