@@ -18,12 +18,25 @@ import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
 import { useState, useContext, useEffect, useMemo } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 export default function ToDoList() {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { todos, setTodos } = useContext(ToDosContext);
   const [titleInput, setTitleInput] = useState('');
-
+  const [dialogToDo, setDialogToDo] = useState(null);
   const [tasksCategory, setTasksCategory] = useState('all');
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editedToDo, setEditedToDo] = useState({ ...dialogToDo });
+  useEffect(() => {
+    if (showEditDialog) {
+      setEditedToDo({ ...dialogToDo });
+    }
+  }, [showEditDialog, dialogToDo]);
 
   const completedTasks = useMemo(() => {
     return todos.filter((t) => {
@@ -47,10 +60,6 @@ export default function ToDoList() {
     selectedTasksList = notCompletedTasks;
   }
 
-  const todosJsx = selectedTasksList.map((td) => {
-    return <ToDo key={td.id} todo={td} />;
-  });
-
   function changeDisplayedType(e) {
     setTasksCategory(e.target.value);
   }
@@ -73,8 +82,142 @@ export default function ToDoList() {
     setTitleInput('');
   }
 
+  /********* Event Handler **********/
+  function handleDeleteClose() {
+    setShowDeleteDialog(false);
+  }
+
+  function showTheDeleteDialog(todo) {
+    setDialogToDo(todo);
+    setEditedToDo(todo);
+    setShowDeleteDialog(true);
+  }
+
+  function handleDeleteConfirm() {
+    const updatedToDos = todos.filter((t) => {
+      if (t.id == dialogToDo.id) {
+        return false;
+      }
+      return true;
+    });
+    setTodos(updatedToDos);
+    localStorage.setItem('todos', JSON.stringify(updatedToDos));
+    setShowDeleteDialog(false);
+  }
+
+  function showTheEditDialog(todo) {
+    setDialogToDo(todo);
+    setShowEditDialog(true);
+  }
+  function handleEditClose() {
+    setShowEditDialog(false);
+  }
+  function handleEditConfirm() {
+    const edited_ToDo = todos.map((t) => {
+      if (t.id == editedToDo.id) {
+        return { ...t, title: editedToDo.title, details: editedToDo.details };
+      } else {
+        return t;
+      }
+    });
+    setTodos(edited_ToDo);
+    localStorage.setItem('todos', JSON.stringify(edited_ToDo));
+    setShowEditDialog(false);
+  }
+  const todosJsx = selectedTasksList.map((td) => {
+    return (
+      <ToDo
+        key={td.id}
+        todo={td}
+        showDelete={showTheDeleteDialog}
+        showEdit={showTheEditDialog}
+      />
+    );
+  });
   return (
-    <React.Fragment>
+    <>
+      {/*      Delete Dialog      */}
+      <Dialog
+        open={showDeleteDialog}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ direction: 'rtl' }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'هل أنت متأكد من حذف المهمة؟'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            حذف المهمة يعني أنك لن تستطيع الوصول إليها مرة أخرى عزيزي المستخدم.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteClose}>إغلاق</Button>
+          <Button onClick={handleDeleteConfirm} autoFocus>
+            مسح
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ---- Delete Dialog ---- */}
+      {/*      Edit Dialog      */}
+      <Dialog
+        open={showEditDialog}
+        onClose={handleEditClose}
+        sx={{ direction: 'rtl' }}
+        slotProps={{
+          paper: {
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleEditClose();
+            },
+          },
+        }}
+      >
+        <DialogTitle>تعديل المهمة</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="taskTitle"
+            name="taskTitle"
+            label="عنوان المهمة"
+            fullWidth
+            variant="standard"
+            value={editedToDo.title}
+            onChange={(e) => {
+              setEditedToDo({ ...editedToDo, title: e.target.value });
+            }}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="taskDetails"
+            name="taskDetails"
+            label="تفاصيل المهمة"
+            fullWidth
+            variant="standard"
+            value={editedToDo.details}
+            onChange={(e) => {
+              setEditedToDo({ ...editedToDo, details: e.target.value });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose}>إغلاق</Button>
+          <Button type="submit" onClick={handleEditConfirm}>
+            تعديل
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ---- Edit Dialog ---- */}
       <Container maxWidth="sm">
         <Card
           sx={{
@@ -130,6 +273,6 @@ export default function ToDoList() {
           </Grid>
         </Card>
       </Container>
-    </React.Fragment>
+    </>
   );
 }

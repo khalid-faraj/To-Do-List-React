@@ -17,21 +17,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-export default function ToDo({ todo }) {
+export default function ToDo({ todo, showDelete, showEdit }) {
   const { todos, setTodos } = useContext(ToDosContext);
 
   /********* States **********/
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [editedToDo, setEditedToDo] = useState({ ...todo });
-
   /********* States **********/
-  useEffect(() => {
-    if (showEditDialog) {
-      setEditedToDo({ ...todo });
-    }
-  }, [showEditDialog, todo]);
+
   /********* Event Handler **********/
 
   function handelCheckClick() {
@@ -46,133 +38,17 @@ export default function ToDo({ todo }) {
   }
 
   function handleEditClick() {
-    setShowEditDialog(true);
-  }
-
-  function handleEditClose() {
-    setShowEditDialog(false);
-  }
-  function handleEditConfirm() {
-    const edited_ToDo = todos.map((t) => {
-      if (t.id == todo.id) {
-        return { ...t, title: editedToDo.title, details: editedToDo.details };
-      } else {
-        return t;
-      }
-    });
-    setTodos(edited_ToDo);
-    localStorage.setItem('todos', JSON.stringify(edited_ToDo));
-
-    setShowEditDialog(false);
+    showEdit(todo);
   }
 
   function handleDeleteClick() {
-    setShowDeleteDialog(true);
-  }
-
-  function handleDeleteClose() {
-    setShowDeleteDialog(false);
-  }
-
-  function handleDeleteConfirm() {
-    const updatedToDos = todos.filter((t) => {
-      if (t.id == todo.id) {
-        return false;
-      }
-      return true;
-    });
-    setTodos(updatedToDos);
-    localStorage.setItem('todos', JSON.stringify(updatedToDos));
+    showDelete(todo);
   }
 
   /********* Event Handler **********/
 
   return (
     <>
-      {/*      Delete Dialog      */}
-      <Dialog
-        open={showDeleteDialog}
-        onClose={handleDeleteClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{ direction: 'rtl' }}
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'هل أنت متأكد من حذف المهمة؟'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            حذف المهمة يعني أنك لن تستطيع الوصول إليها مرة أخرى عزيزي المستخدم.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteClose}>إغلاق</Button>
-          <Button onClick={handleDeleteConfirm} autoFocus>
-            مسح
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* ---- Delete Dialog ---- */}
-
-      {/*      Edit Dialog      */}
-      <Dialog
-        open={showEditDialog}
-        onClose={handleEditClose}
-        sx={{ direction: 'rtl' }}
-        slotProps={{
-          paper: {
-            component: 'form',
-            onSubmit: (event) => {
-              event.preventDefault();
-              const formData = new FormData(event.currentTarget);
-              const formJson = Object.fromEntries(formData.entries());
-              const email = formJson.email;
-              console.log(email);
-              handleEditClose();
-            },
-          },
-        }}
-      >
-        <DialogTitle>تعديل المهمة</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="taskTitle"
-            name="taskTitle"
-            label="عنوان المهمة"
-            fullWidth
-            variant="standard"
-            value={editedToDo.title}
-            onChange={(e) => {
-              setEditedToDo({ ...editedToDo, title: e.target.value });
-            }}
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="taskDetails"
-            name="taskDetails"
-            label="تفاصيل المهمة"
-            fullWidth
-            variant="standard"
-            value={editedToDo.details}
-            onChange={(e) => {
-              setEditedToDo({ ...editedToDo, details: e.target.value });
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditClose}>إغلاق</Button>
-          <Button type="submit" onClick={handleEditConfirm}>
-            تعديل
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* ---- Edit Dialog ---- */}
-
       {/*      Card      */}
       <Card
         className="card"
