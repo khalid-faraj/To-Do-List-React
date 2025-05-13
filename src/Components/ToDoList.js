@@ -16,7 +16,7 @@ import ToDo from './ToDo';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useMemo } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
 
 export default function ToDoList() {
@@ -25,13 +25,17 @@ export default function ToDoList() {
 
   const [tasksCategory, setTasksCategory] = useState('all');
 
-  const completedTasks = todos.filter((t) => {
-    return t.isDone;
-  });
+  const completedTasks = useMemo(() => {
+    return todos.filter((t) => {
+      return t.isDone;
+    });
+  }, [todos]);
 
-  const notCompletedTasks = todos.filter((t) => {
-    return !t.isDone;
-  });
+  const notCompletedTasks = useMemo(() => {
+    return todos.filter((t) => {
+      return !t.isDone;
+    });
+  }, [todos]);
 
   let selectedTasksList = todos;
 
