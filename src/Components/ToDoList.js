@@ -12,7 +12,7 @@ import ToDo from './ToDo';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
-import { useState, useContext, useEffect, useMemo } from 'react';
+import { useState, useContext, useEffect, useMemo, useReducer } from 'react';
 import { ToDosContext } from '../Contexts/ToDosContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -21,10 +21,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContext } from '../Contexts/ToastContext';
 import { useToast } from '../Contexts/ToastContext';
+import todosReducer from '../Reducers/todosReducer';
 
 export default function ToDoList() {
   const { showAndHideToast } = useToast();
-  const { todos, setTodos } = useContext(ToDosContext);
+  const { todos2, setTodos } = useContext(ToDosContext);
+  const [todos, dispach] = useReducer(todosReducer, []);
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [titleInput, setTitleInput] = useState('');
   const [dialogToDo, setDialogToDo] = useState(null);
@@ -69,15 +72,7 @@ export default function ToDoList() {
   }, []);
 
   function handelAddClick() {
-    const newTask = {
-      id: Guid(),
-      title: titleInput,
-      details: '',
-      isDone: false,
-    };
-    const updatedtodos = [...todos, newTask];
-    setTodos(updatedtodos);
-    localStorage.setItem('todos', JSON.stringify(updatedtodos));
+    dispach({ type: 'added', payload: { titleInput } });
     setTitleInput('');
     showAndHideToast('تمت إضافة مهمة جديدة');
   }
