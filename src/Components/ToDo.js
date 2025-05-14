@@ -17,10 +17,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import { useToast } from '../Contexts/ToastContext';
 
 export default function ToDo({ todo, showDelete, showEdit }) {
   const { todos, setTodos } = useContext(ToDosContext);
-  const { showAndHideToast } = useContext(ToastContext);
+  const { showAndHideToast } = useToast();
 
   /********* States **********/
 

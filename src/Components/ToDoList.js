@@ -8,10 +8,6 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToDo from './ToDo';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -24,10 +20,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContext } from '../Contexts/ToastContext';
+import { useToast } from '../Contexts/ToastContext';
 
 export default function ToDoList() {
+  const { showAndHideToast } = useToast();
   const { todos, setTodos } = useContext(ToDosContext);
-  const { showAndHideToast } = useContext(ToastContext);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [titleInput, setTitleInput] = useState('');
   const [dialogToDo, setDialogToDo] = useState(null);

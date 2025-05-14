@@ -1,14 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import ToDoList from './Components/ToDoList';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { typographyClasses } from '@mui/material';
 import { ToDosContext } from './Contexts/ToDosContext';
 import { v4 as Guid } from 'uuid';
 import { useState } from 'react';
-import ToDo from './Components/ToDo';
-import MySnackBar from './Components/MySnackBar';
-import { ToastContext } from './Contexts/ToastContext';
+import { ToastProvider } from './Contexts/ToastContext';
 
 const theme = createTheme({
   typography: {
@@ -33,20 +29,10 @@ const stateToDos = [
 
 function App() {
   const [todos, setTodos] = useState(stateToDos);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
-
-  function showAndHideToast(message) {
-    setOpen(true);
-    setMessage(message);
-    setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-  }
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastContext.Provider value={{ showAndHideToast }}>
+      <ToastProvider>
         <div
           className="App"
           style={{
@@ -58,12 +44,11 @@ function App() {
             direction: 'rtl',
           }}
         >
-          <MySnackBar open={open} message={message} />
           <ToDosContext.Provider value={{ todos, setTodos }}>
             <ToDoList />
           </ToDosContext.Provider>
         </div>
-      </ToastContext.Provider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
