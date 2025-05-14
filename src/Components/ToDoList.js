@@ -22,6 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContext } from '../Contexts/ToastContext';
 import { useToast } from '../Contexts/ToastContext';
 import todosReducer from '../Reducers/todosReducer';
+import { type } from '@testing-library/user-event/dist/type';
 
 export default function ToDoList() {
   const { showAndHideToast } = useToast();
@@ -67,8 +68,7 @@ export default function ToDoList() {
   }
 
   useEffect(() => {
-    const storageToDos = JSON.parse(localStorage.getItem('todos')) ?? [];
-    setTodos(storageToDos);
+    dispach({ type: 'get' });
   }, []);
 
   function handelAddClick() {
@@ -89,14 +89,7 @@ export default function ToDoList() {
   }
 
   function handleDeleteConfirm() {
-    const updatedToDos = todos.filter((t) => {
-      if (t.id == dialogToDo.id) {
-        return false;
-      }
-      return true;
-    });
-    setTodos(updatedToDos);
-    localStorage.setItem('todos', JSON.stringify(updatedToDos));
+    dispach({ type: 'deleted', payload: dialogToDo });
     setShowDeleteDialog(false);
     showAndHideToast('تم المسح');
   }
@@ -109,15 +102,7 @@ export default function ToDoList() {
     setShowEditDialog(false);
   }
   function handleEditConfirm() {
-    const edited_ToDo = todos.map((t) => {
-      if (t.id == editedToDo.id) {
-        return { ...t, title: editedToDo.title, details: editedToDo.details };
-      } else {
-        return t;
-      }
-    });
-    setTodos(edited_ToDo);
-    localStorage.setItem('todos', JSON.stringify(edited_ToDo));
+    dispach({ type: 'edited', payload: editedToDo });
     setShowEditDialog(false);
     showAndHideToast('تم التعديل');
   }
