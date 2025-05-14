@@ -18,10 +18,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useToast } from '../Contexts/ToastContext';
+import { useToDos } from '../Contexts/ToDosContext';
+import { type } from '@testing-library/user-event/dist/type';
+import { useReducer } from 'react';
 
 export default function ToDo({ todo, showDelete, showEdit }) {
-  const { todos, setTodos } = useContext(ToDosContext);
   const { showAndHideToast } = useToast();
+  const { todos, dispach } = useToDos();
 
   /********* States **********/
 
@@ -30,14 +33,7 @@ export default function ToDo({ todo, showDelete, showEdit }) {
   /********* Event Handler **********/
 
   function handelCheckClick() {
-    const updatedToDos = todos.map((t) => {
-      if (t.id == todo.id) {
-        t.isDone = !t.isDone;
-      }
-      return t;
-    });
-    setTodos(updatedToDos);
-    localStorage.setItem('todos', JSON.stringify(updatedToDos));
+    dispach({ type: 'toggeledCompleted', payload: todo });
     showAndHideToast('أحسنت');
   }
 

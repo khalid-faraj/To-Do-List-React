@@ -42,6 +42,16 @@ export default function reducer(currentTodos, action) {
       const storageToDos = JSON.parse(localStorage.getItem('todos')) ?? [];
       return storageToDos;
     }
+    case 'toggeledCompleted': {
+      const updatedToDos = currentTodos.map((t) => {
+        if (t.id == action.payload.id) {
+          t.isDone = !t.isDone;
+        }
+        return t;
+      });
+      localStorage.setItem('todos', JSON.stringify(updatedToDos));
+      return updatedToDos;
+    }
     default: {
       throw Error('UnKnow Action' + action.type);
     }

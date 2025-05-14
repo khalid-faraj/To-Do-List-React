@@ -13,7 +13,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { v4 as Guid } from 'uuid';
 import { useState, useContext, useEffect, useMemo, useReducer } from 'react';
-import { ToDosContext } from '../Contexts/ToDosContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -23,11 +22,10 @@ import { ToastContext } from '../Contexts/ToastContext';
 import { useToast } from '../Contexts/ToastContext';
 import todosReducer from '../Reducers/todosReducer';
 import { type } from '@testing-library/user-event/dist/type';
-
+import { useToDos } from '../Contexts/ToDosContext';
 export default function ToDoList() {
+  const { todos, dispach } = useToDos();
   const { showAndHideToast } = useToast();
-  const { todos2, setTodos } = useContext(ToDosContext);
-  const [todos, dispach] = useReducer(todosReducer, []);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [titleInput, setTitleInput] = useState('');
