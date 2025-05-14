@@ -1,3 +1,4 @@
+import { isDocument } from '@testing-library/user-event/dist/utils';
 import { v4 as Guid } from 'uuid';
 
 export default function reducer(currentTodos, action) {
@@ -45,7 +46,11 @@ export default function reducer(currentTodos, action) {
     case 'toggeledCompleted': {
       const updatedToDos = currentTodos.map((t) => {
         if (t.id == action.payload.id) {
-          t.isDone = !t.isDone;
+          const upDatedTodo = {
+            ...t,
+            isDone: !t.isDone,
+          };
+          return upDatedTodo;
         }
         return t;
       });
